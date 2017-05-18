@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class SolutionHandler : MonoBehaviour {
 
-    public Text solvedText;
-
     public bool IsSolved()
     {
         //grab all pieces
@@ -69,12 +67,12 @@ public class SolutionHandler : MonoBehaviour {
             {
                 if (piece.GetComponent<Piece>().shape == regionShape)
                 {
-                    return SetSolvedText(false);
+                    return false;
                 }
             }
         }
-        
-        return SetSolvedText(true);
+
+        return true;
     }
 
     List<GameObject> GetValidAdjacentPieces(GameObject current, List<GameObject> pieces)
@@ -102,24 +100,6 @@ public class SolutionHandler : MonoBehaviour {
         }
 
         return retList;
-    }
-
-    bool SetSolvedText(bool solved)
-    {
-        if (solved)
-        {
-            SetText("Solved");
-        }
-        else
-        {
-            SetText("");
-        }
-        return solved;
-    }
-
-    void SetText(string text)
-    {
-        solvedText.text = text;
     }
 	
 }

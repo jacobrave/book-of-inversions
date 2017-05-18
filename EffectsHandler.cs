@@ -27,11 +27,11 @@ public class EffectsHandler : MonoBehaviour {
         shapeModule.radius = scale / 2;
     }
 
-    public void DestroySparks()
+    public void DestroyVFX()
     {
         foreach(Transform child in parent.transform)
         {
-            if (child.name == "Sparks(Clone)") Destroy(child.gameObject);
+            Destroy(child.gameObject);
         }
     }
 
@@ -45,7 +45,7 @@ public class EffectsHandler : MonoBehaviour {
             {
                 case Piece.Shape.X:
                     newEffect = Instantiate(solvedX,
-                        go.transform.position + (go.transform.localScale.x/2 * (Vector3.right + Vector3.down)),
+                        go.transform.position + (go.transform.localScale.x/2 * (Vector3.right + Vector3.down) + (.1f * Vector3.back)),
                         Quaternion.identity,
                         parent.transform);
                     shapeModule = newEffect.GetComponent<ParticleSystem>().shape;
@@ -53,7 +53,7 @@ public class EffectsHandler : MonoBehaviour {
                     break;
                 case Piece.Shape.O:
                     newEffect = Instantiate(solvedO,
-                        go.transform.position + (go.transform.localScale.x/2 * (Vector3.right + Vector3.down)),
+                        go.transform.position + (go.transform.localScale.x/2 * (Vector3.right + Vector3.down) + (.1f * Vector3.back)),
                         Quaternion.identity,
                         parent.transform);
                     shapeModule = newEffect.GetComponent<ParticleSystem>().shape;

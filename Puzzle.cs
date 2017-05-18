@@ -36,10 +36,7 @@ public class Puzzle : MonoBehaviour {
     List<Vector3> pathPositions;
 	
 	void Awake() {
-        Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
-        float xScale = screenMax.x / (3 * col + 1); float yScale = screenMax.y / (3 * row + 1);
-        unit = Mathf.Min(xScale, yScale);
-        offset = new Vector3((screenMax.x - (3 * col + 1) * unit), -(screenMax.y - (3 * row + 1) * unit)) / 2;
+        GetScale();
         RefreshBoard();
         PopulatePuzzle();
 
@@ -54,10 +51,12 @@ public class Puzzle : MonoBehaviour {
         //board resize, recreate the puzzle.
         if (RefreshBoard() || updatePuzzle)
         {
+            GetScale();
             PopulatePuzzle();
             updatePuzzle = false;
         }
 #endif
+
         switch (boardState)
         {
             case BoardState.Moving:
@@ -149,12 +148,20 @@ public class Puzzle : MonoBehaviour {
         }
     }
 
+    void GetScale()
+    {
+        Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+        float xScale = screenMax.x / (3 * col + 1); float yScale = screenMax.y / (3 * row + 1);
+        unit = Mathf.Min(xScale, yScale);
+        offset = new Vector3((screenMax.x - (3 * col + 1) * unit), -(screenMax.y - (3 * row + 1) * unit)) / 2;
+    }
+
     public void ReceivePath(List<GameObject> path)
     {
-        currentPath = new List<GameObject>();
-        currentPath.AddRange(path);
-        SetAnimationMembers(); //for animations.
-        ChangeState(BoardState.Moving); //do them!
+            currentPath = new List<GameObject>();
+            currentPath.AddRange(path);
+            SetAnimationMembers(); //for animations.
+            ChangeState(BoardState.Moving); //do them!
     }
 
     void ResetBoardByPath()
@@ -196,7 +203,11 @@ public class Puzzle : MonoBehaviour {
 
     void SetAnimationMembers()
     {
-        moveTime = 0;
+        //only actually reset nonsense if it's a visible animation
+        if (currentPath.Count > 1)
+        {
+            moveTime = 0;
+        }
         pathPositions = new List<Vector3>();
         foreach(GameObject go in currentPath)
         {
@@ -210,11 +221,12 @@ public class Puzzle : MonoBehaviour {
         switch (newState)
         {
             case BoardState.Ready:
-                FindObjectOfType<EffectsHandler>().DestroySparks();
+                FindObjectOfType<EffectsHandler>().DestroyVFX();
                 ResetBoardByPath();
                 break;
             case BoardState.Solved:
                 FindObjectOfType<EffectsHandler>().AddSolvedFX();
+                FindObjectOfType<GameController>().SetCanvasActive(true);
                 break;
             case BoardState.Moving:
 
