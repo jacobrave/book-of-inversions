@@ -19,6 +19,7 @@ public class InputHandler : MonoBehaviour {
 	void Update () {
         touchCol.enabled = Input.GetMouseButton(0);
         transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.position -= transform.position.z * Vector3.forward;
 
         switch (Puzzle.boardState)
         {

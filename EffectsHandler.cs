@@ -6,13 +6,15 @@ public class EffectsHandler : MonoBehaviour {
     GameObject solvedX, solvedO;
     GameObject parent;
 
-	// Use this for initialization
+    //GameObject brush;
+
 	void Start () {
         sparks = (GameObject)Resources.Load("VFX/Sparks");
         solvedX = (GameObject)Resources.Load("VFX/SolvedX");
         solvedO = (GameObject)Resources.Load("VFX/SolvedO");
         parent = new GameObject();
         parent.name = "VFX";
+        //DeactivateBrush();
     }
 	
 	// Update is called once per frame
